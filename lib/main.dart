@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const MainApp());
-}
+import 'src/app_widget.dart';
+import 'src/core/dependencies/local_storage/shared_preferences_service.dart';
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
-    );
-  }
+  final sp = await SharedPreferences.getInstance();
+
+  await SharedPreferencesService().init(sp);
+
+  runApp(const AppWidget());
 }
