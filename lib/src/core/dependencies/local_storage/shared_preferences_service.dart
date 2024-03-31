@@ -11,7 +11,7 @@ class SharedPreferencesService implements LocalStorageApi {
 
   static final SharedPreferencesService _instance = SharedPreferencesService._internal();
 
-  late final SharedPreferences _sharedPreferences;
+  late SharedPreferences _sharedPreferences;
 
   @override
   Future<void> delete(String key) async => await _sharedPreferences.remove(key);

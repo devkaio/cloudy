@@ -30,7 +30,7 @@ class WeatherRepositoryImpl implements WeatherRepository {
     } on WeatherRepositoryException catch (e) {
       return DataResult.failure(e);
     } catch (e) {
-      return DataResult.failure(WeatherRepositoryException());
+      return DataResult.failure(WeatherRepositoryException('An error occurred while fetching weather data'));
     }
   }
 
@@ -46,8 +46,10 @@ class WeatherRepositoryImpl implements WeatherRepository {
       final citiesWithWeather = (response.body['list'] as List).map((e) => (city: City.fromJson(e), weather: Weather.fromJson(e))).toList();
 
       return DataResult.success(citiesWithWeather);
+    } on WeatherRepositoryException catch (e) {
+      return DataResult.failure(e);
     } catch (e) {
-      return DataResult.failure(WeatherRepositoryException());
+      return DataResult.failure(WeatherRepositoryException('An error occurred while fetching weather data'));
     }
   }
 
@@ -62,8 +64,10 @@ class WeatherRepositoryImpl implements WeatherRepository {
       final weather = (response.body['list'] as List).map((e) => Weather.fromJson(e)).toList();
 
       return DataResult.success(weather);
+    } on WeatherRepositoryException catch (e) {
+      return DataResult.failure(e);
     } catch (e) {
-      return DataResult.failure(WeatherRepositoryException());
+      return DataResult.failure(WeatherRepositoryException('An error occurred while fetching weather data'));
     }
   }
 }
