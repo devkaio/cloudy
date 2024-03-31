@@ -4,18 +4,19 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 
 import '../../api/http_api.dart';
-import '../../constants/app_constants.dart';
 import '../local_storage/shared_preferences_service.dart';
 
 class DioService implements HttpApi {
-  factory DioService({required SharedPreferencesService sharedPreferencesService}) {
-    _instance ??= DioService._internal(sharedPreferencesService: sharedPreferencesService);
+  factory DioService({required SharedPreferencesService sharedPreferencesService, required Dio dio}) {
+    _instance ??= DioService._internal(sharedPreferencesService: sharedPreferencesService, dio: dio);
     return _instance!;
   }
 
   DioService._internal({
     required SharedPreferencesService sharedPreferencesService,
-  }) : _sharedPreferencesService = sharedPreferencesService {
+    required Dio dio,
+  })  : _sharedPreferencesService = sharedPreferencesService,
+        _dio = dio {
     _dio.interceptors.addAll([
       LogInterceptor(
         request: true,
@@ -34,15 +35,7 @@ class DioService implements HttpApi {
 
   final SharedPreferencesService _sharedPreferencesService;
 
-  final Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: AppConstants.baseUrl,
-      queryParameters: {
-        'appid': AppConstants.apiKey,
-        'units': 'metric',
-      },
-    ),
-  );
+  final Dio _dio;
 
   @override
   Future<HttpResponse> get(String url, {Map<String, String>? headers}) async {
