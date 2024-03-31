@@ -9,11 +9,27 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  collection: ^1.18.0
+  shared_preferences: ^2.2.2
+  connectivity_plus: ^6.0.1
+  diacritic: ^0.1.5
+  dio: ^5.4.2+1
+  flutter_bloc: ^8.1.5
+  http: ^1.2.1
+  json_annotation: ^4.8.1
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  bloc_test: ^9.1.7
+  mockito: ^5.4.4
+  build_runner: ^2.4.9
+  json_serializable: ^6.7.1
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/
+    - assets/images/
