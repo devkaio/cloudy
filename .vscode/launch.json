@@ -7,19 +7,28 @@
         {
             "name": "cloudy",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": [
+                "--dart-define-from-file=dev.env",
+            ]
         },
         {
             "name": "cloudy (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
+            "args": [
+                "--dart-define-from-file=dev.env",
+            ]
         },
         {
             "name": "cloudy (release mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
-        }
+            "flutterMode": "release",
+            "args": [
+                "--dart-define-from-file=dev.env",
+            ]
+        },
     ]
 }
