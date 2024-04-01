@@ -73,7 +73,7 @@ class CacheInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (err.type == DioExceptionType.connectionTimeout || err.type == DioExceptionType.connectionError) {
+    if ([DioExceptionType.connectionTimeout, DioExceptionType.connectionError, DioExceptionType.unknown].contains(err.type)) {
       final cachedResponse = await _sharedPreferencesService.read(err.requestOptions.path);
 
       if (cachedResponse != null) {

@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../../core/widgets/search_list_bar.dart';
 import '../../../domain/city/city.dart';
 import '../../../domain/weather/weather.dart';
-import '../cubit/current_weather_cubit.dart';
 import '../../forecast_weather/forecast_weather.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import '../cubit/current_weather_cubit.dart';
 
 class CurrentWeatherView extends StatefulWidget {
   const CurrentWeatherView({super.key});

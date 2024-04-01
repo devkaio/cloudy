@@ -10,6 +10,7 @@ import 'package:cloudy/src/core/dependencies/local_storage/shared_preferences_se
 import 'package:dio/src/adapter.dart' as _i3;
 import 'package:dio/src/cancel_token.dart' as _i10;
 import 'package:dio/src/dio.dart' as _i9;
+import 'package:dio/src/dio_exception.dart' as _i11;
 import 'package:dio/src/dio_mixin.dart' as _i5;
 import 'package:dio/src/options.dart' as _i2;
 import 'package:dio/src/response.dart' as _i6;
@@ -72,6 +73,17 @@ class _FakeInterceptors_3 extends _i1.SmartFake implements _i5.Interceptors {
 
 class _FakeResponse_4<T1> extends _i1.SmartFake implements _i6.Response<T1> {
   _FakeResponse_4(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeInterceptorState_5<T> extends _i1.SmartFake
+    implements _i5.InterceptorState<T> {
+  _FakeInterceptorState_5(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -839,4 +851,117 @@ class MockDio extends _i1.Mock implements _i9.Dio {
           ),
         )),
       ) as _i8.Future<_i6.Response<T>>);
+}
+
+/// A class which mocks [ErrorInterceptorHandler].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockErrorInterceptorHandler extends _i1.Mock
+    implements _i5.ErrorInterceptorHandler {
+  MockErrorInterceptorHandler() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i8.Future<_i5.InterceptorState<dynamic>> get future => (super.noSuchMethod(
+        Invocation.getter(#future),
+        returnValue: _i8.Future<_i5.InterceptorState<dynamic>>.value(
+            _FakeInterceptorState_5<dynamic>(
+          this,
+          Invocation.getter(#future),
+        )),
+      ) as _i8.Future<_i5.InterceptorState<dynamic>>);
+
+  @override
+  bool get isCompleted => (super.noSuchMethod(
+        Invocation.getter(#isCompleted),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  void next(_i11.DioException? error) => super.noSuchMethod(
+        Invocation.method(
+          #next,
+          [error],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void resolve(_i6.Response<dynamic>? response) => super.noSuchMethod(
+        Invocation.method(
+          #resolve,
+          [response],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void reject(_i11.DioException? error) => super.noSuchMethod(
+        Invocation.method(
+          #reject,
+          [error],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
+/// A class which mocks [ResponseInterceptorHandler].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockResponseInterceptorHandler extends _i1.Mock
+    implements _i5.ResponseInterceptorHandler {
+  MockResponseInterceptorHandler() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i8.Future<_i5.InterceptorState<dynamic>> get future => (super.noSuchMethod(
+        Invocation.getter(#future),
+        returnValue: _i8.Future<_i5.InterceptorState<dynamic>>.value(
+            _FakeInterceptorState_5<dynamic>(
+          this,
+          Invocation.getter(#future),
+        )),
+      ) as _i8.Future<_i5.InterceptorState<dynamic>>);
+
+  @override
+  bool get isCompleted => (super.noSuchMethod(
+        Invocation.getter(#isCompleted),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  void next(_i6.Response<dynamic>? response) => super.noSuchMethod(
+        Invocation.method(
+          #next,
+          [response],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void resolve(_i6.Response<dynamic>? response) => super.noSuchMethod(
+        Invocation.method(
+          #resolve,
+          [response],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void reject(
+    _i11.DioException? error, [
+    bool? callFollowingErrorInterceptor = false,
+  ]) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #reject,
+          [
+            error,
+            callFollowingErrorInterceptor,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
 }

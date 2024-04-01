@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   late Map<String, dynamic> weather;
 
-  group('City.toJson tests', () {
+  group('Weather tests', () {
     setUp(() {
       weather = {
         'main': {
@@ -89,6 +89,38 @@ void main() {
         expect(result.weatherData.first.icon, '01d');
       },
     );
+
+    test('Weather.copyWith should return original values if no property is passed on', () {
+      final result = Weather.fromJson(weather).copyWith();
+      expect(result, isNotNull);
+      expect(result.dt, 1618945200);
+      expect(result.weatherDetails, isNotNull);
+      expect(result.weatherDetails!.temp, 27.3);
+      expect(result.weatherDetails!.tempMax, 31.5);
+      expect(result.weatherDetails!.tempMin, 24.2);
+      expect(result.weatherData, isNotEmpty);
+      expect(result.weatherData.first.main, 'Cloudy');
+      expect(result.weatherData.first.description, 'cloudy sky');
+      expect(result.weatherData.first.icon, '01d');
+    });
+
+    test('WeatherData copywith should return the original values if no property is passed on', () {
+      final result = WeatherData(main: 'Cloudy', description: 'cloudy sky', icon: '01d').copyWith();
+
+      expect(result, isNotNull);
+      expect(result.main, 'Cloudy');
+      expect(result.description, 'cloudy sky');
+      expect(result.icon, '01d');
+    });
+
+    test('WeatherDetails copyWith should return the original values if no property is passed on', () {
+      final result = WeatherDetails(temp: 27.3, tempMin: 24.2, tempMax: 31.5).copyWith();
+
+      expect(result, isNotNull);
+      expect(result.temp, 27.3);
+      expect(result.tempMax, 31.5);
+      expect(result.tempMin, 24.2);
+    });
 
     test('Weater.date should return the timestamp to milliseconds since epoch', () {
       final result = Weather.fromJson(weather);

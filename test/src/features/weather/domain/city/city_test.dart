@@ -96,6 +96,11 @@ void main() {
       expect(result['forecast'].first['main'], isNotNull);
     });
 
+    test('flagUrl should return the correct url based on the country', () {
+      final result = City.fromJson(city);
+      expect(result.flagUrl, 'https://openweathermap.org/images/flags/br.png');
+    });
+
     test('City.copyWith should return a valid City instance with all properties copied correctly', () {
       final result = City.fromJson(city).copyWith(
         name: 'Paris',
@@ -134,6 +139,28 @@ void main() {
       expect(result.currentWeather!.weatherData.first.icon, '01d');
       expect(result.forecastWeather, isNotEmpty);
       expect(result.forecastWeather!.first.dt, 1711828408);
+      expect(result.forecastWeather!.first.weatherDetails, isNotNull);
+    });
+
+    test('City.copyWith should return original values if no property is passed on', () {
+      final result = City.fromJson(city).copyWith();
+      expect(result, isNotNull);
+      expect(result.name, 'São Paulo');
+      expect(result.coordinates, isNotNull);
+      expect(result.coordinates.lat, -23.5505);
+      expect(result.coordinates.lon, -46.6333);
+      expect(result.currentWeather, isNotNull);
+      expect(result.currentWeather!.dt, 1711828408);
+      expect(result.currentWeather!.weatherDetails, isNotNull);
+      expect(result.currentWeather!.weatherDetails!.temp, 27.3);
+      expect(result.currentWeather!.weatherDetails!.tempMax, 31.5);
+      expect(result.currentWeather!.weatherDetails!.tempMin, 24.2);
+      expect(result.currentWeather!.weatherData, isNotEmpty);
+      expect(result.currentWeather!.weatherData.first.main, 'Cloudy');
+      expect(result.currentWeather!.weatherData.first.description, 'cloudy sky');
+      expect(result.currentWeather!.weatherData.first.icon, '01d');
+      expect(result.forecastWeather, isNotEmpty);
+      expect(result.forecastWeather!.first.dt, 1712001208);
       expect(result.forecastWeather!.first.weatherDetails, isNotNull);
     });
   });

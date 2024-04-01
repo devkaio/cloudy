@@ -7,7 +7,12 @@ import 'package:mockito/mockito.dart';
 
 import 'dio_service_test.mocks.dart';
 
-@GenerateMocks([SharedPreferencesService, Dio])
+@GenerateMocks([
+  SharedPreferencesService,
+  Dio,
+  ErrorInterceptorHandler,
+  ResponseInterceptorHandler,
+])
 void main() {
   late SharedPreferencesService sharedPreferencesService;
   late Dio dio;
@@ -60,6 +65,64 @@ void main() {
       ));
 
       await expectLater(dioService.get(url, headers: headers), completes);
+    });
+  });
+
+  group('CacheInterceptor test', () {
+    test('onResponse should be saved in local storage corretly', () {
+      final cacheInterceptor = CacheInterceptor(sharedPreferencesService: sharedPreferencesService);
+      final fakeResponseInterceptorHandler = MockResponseInterceptorHandler();
+
+      final response = Response(
+        requestOptions: RequestOptions(path: '/weather?q=London'),
+        data: <String, dynamic>{},
+      );
+
+      cacheInterceptor.onResponse(response, fakeResponseInterceptorHandler);
+
+      verify(sharedPreferencesService.save('/weather?q=London', '{}')).called(1);
+    });
+
+    test('onError should fetch from local storage if exists', () {
+      final cacheInterceptor = CacheInterceptor(sharedPreferencesService: sharedPreferencesService);
+      final fakeErrorInterceptorHandler = MockErrorInterceptorHandler();
+
+      when(sharedPreferencesService.read('/weather?q=London')).thenAnswer((_) async => '{}');
+
+      final dioException = DioException(
+        requestOptions: RequestOptions(path: '/weather?q=London'),
+        response: Response(
+          requestOptions: RequestOptions(path: '/weather?q=London'),
+          statusCode: 404,
+          statusMessage: 'Not Found',
+          data: <String, dynamic>{},
+        ),
+      );
+
+      cacheInterceptor.onError(dioException, fakeErrorInterceptorHandler);
+
+      verify(sharedPreferencesService.read('/weather?q=London')).called(1);
+    });
+
+    test('onError should not fetch from local storage if it does not exist', () {
+      final cacheInterceptor = CacheInterceptor(sharedPreferencesService: sharedPreferencesService);
+      final fakeErrorInterceptorHandler = MockErrorInterceptorHandler();
+
+      when(sharedPreferencesService.read('/weather?q=London')).thenAnswer((_) async => null);
+
+      final dioException = DioException(
+        requestOptions: RequestOptions(path: '/weather?q=London'),
+        response: Response(
+          requestOptions: RequestOptions(path: '/weather?q=London'),
+          statusCode: 404,
+          statusMessage: 'Not Found',
+          data: <String, dynamic>{},
+        ),
+      );
+
+      cacheInterceptor.onError(dioException, fakeErrorInterceptorHandler);
+      verify(sharedPreferencesService.read('/weather?q=London')).called(1);
+      verifyNever(fakeErrorInterceptorHandler.resolve(any));
     });
   });
 }
