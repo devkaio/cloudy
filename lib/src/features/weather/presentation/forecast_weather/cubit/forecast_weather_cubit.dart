@@ -1,7 +1,8 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../data/weather_repository.dart';
 import '../../../domain/city/city.dart';
 import '../../../domain/weather/weather.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'forecast_weather_state.dart';
 

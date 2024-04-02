@@ -48,7 +48,17 @@ class ForecastWeatherView extends StatelessWidget {
               physics: const ClampingScrollPhysics(),
               itemCount: dates.length,
               itemBuilder: (context, index) {
-                final item = state.forecast!.firstWhere((weather) => weather.date == dates[index]);
+                final item = state.forecast!.firstWhere((weather) => weather.date.day == dates[index].day);
+
+                final tempMax = state.forecast!
+                    .where((weather) => weather.date.day == dates[index].day)
+                    .map((e) => e.weatherDetails!.tempMax)
+                    .reduce((current, next) => current > next ? current : next);
+
+                final tempMin = state.forecast!
+                    .where((weather) => weather.date.day == dates[index].day)
+                    .map((e) => e.weatherDetails!.tempMin)
+                    .reduce((current, next) => current < next ? current : next);
 
                 return ExpansionTile(
                     expandedAlignment: Alignment.centerLeft,
@@ -62,8 +72,8 @@ class ForecastWeatherView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('${item.weatherDetails?.tempMax}°'),
-                            Text('${item.weatherDetails?.tempMin}°'),
+                            Text('$tempMax°'),
+                            Text('$tempMin°'),
                           ],
                         ),
                       ],
