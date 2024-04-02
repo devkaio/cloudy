@@ -50,18 +50,34 @@ class CurrentWeatherCubit extends Cubit<CurrentWeatherState> {
     final result = await _weatherRepository.fetchCurrentWeatherByGeolocation(city.coordinates);
 
     result.fold(
-      (data) => emit(CurrentWeatherState(weather: data, loading: false)),
-      (error) => emit(CurrentWeatherState(errorMessage: error.message, loading: false)),
+      (data) => emit(CurrentWeatherState(
+        weather: data,
+        loading: false,
+      )),
+      (error) => emit(CurrentWeatherState(
+        errorMessage: error.message,
+        loading: false,
+        currentWeatherStep: CurrentWeatherStep.initial,
+      )),
     );
   }
 
   Future<void> onSearchCityChanged(String cityName) async {
-    if (cityName.trim().isEmpty) return;
-
+    if (cityName.trim().isEmpty) {
+      _debounce?.cancel();
+      emit(state.copyWith(citiesSearchResult: [], currentWeatherStep: CurrentWeatherStep.initial));
+      return;
+    }
     emit(state.copyWith(currentWeatherStep: CurrentWeatherStep.searching));
 
     _debounce?.cancel();
     _debounce = Timer(const Duration(seconds: 2), () async {
+      if (cityName.trim().isEmpty) {
+        _debounce?.cancel();
+        emit(state.copyWith(citiesSearchResult: [], currentWeatherStep: CurrentWeatherStep.initial));
+        return;
+      }
+
       final result = await _weatherRepository.searchWeather(cityName.undiacritic);
 
       result.fold(
@@ -73,10 +89,13 @@ class CurrentWeatherCubit extends Cubit<CurrentWeatherState> {
         ),
         (failure) => emit(
           state.copyWith(
-            currentWeatherStep: CurrentWeatherStep.failedSearch,
+            currentWeatherStep: CurrentWeatherStep.searchResult,
+            citiesSearchResult: [],
           ),
         ),
       );
+
+      return;
     });
   }
 

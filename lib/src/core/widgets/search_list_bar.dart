@@ -6,17 +6,21 @@ class SearchListBar<T> extends StatefulWidget {
   const SearchListBar({
     super.key,
     required this.items,
-    required this.onItemSelected,
     required this.onChanged,
-    this.isSearching = false,
+    this.isLoading = false,
+    this.hasData = false,
     required this.builder,
+    this.searchHintText = 'Type to search...',
+    this.onDataResultText = 'No results found for this search.\nPlease try again.',
   });
 
-  final bool isSearching;
+  final bool isLoading;
+  final bool hasData;
   final List<T> items;
   final ValueSetter<String> onChanged;
-  final ValueSetter<T> onItemSelected;
   final Widget Function(BuildContext, T) builder;
+  final String searchHintText;
+  final String onDataResultText;
 
   @override
   State<SearchListBar<T>> createState() => _SearchListBarState<T>();
@@ -28,7 +32,7 @@ class _SearchListBarState<T> extends State<SearchListBar<T>> {
 
   @override
   void didUpdateWidget(covariant SearchListBar<T> oldWidget) {
-    _readyStatusController.add(widget.isSearching);
+    _readyStatusController.add(widget.isLoading);
     super.didUpdateWidget(oldWidget);
   }
 
@@ -41,105 +45,104 @@ class _SearchListBarState<T> extends State<SearchListBar<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Column(
-          children: [
-            TextField(
-              readOnly: true,
-              controller: _queryTextController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              TextField(
+                readOnly: true,
+                controller: _queryTextController,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintText: widget.searchHintText,
+                ),
+                onTapOutside: (event) => FocusScope.of(context).unfocus(),
+                onTap: () {
+                  FocusScope.of(context).unfocus();
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondary) {
+                        return StreamBuilder<bool>(
+                          stream: _readyStatusController.stream,
+                          builder: (context, snapshot) {
+                            return PopScope(
+                              onPopInvoked: (didPop) {
+                                _queryTextController.clear();
+                                widget.onChanged('');
+                              },
+                              child: Scaffold(
+                                appBar: AppBar(
+                                  leading: BackButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      _queryTextController.clear();
+                                      widget.onChanged('');
+                                    },
+                                  ),
+                                ),
+                                body: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextFormField(
+                                        controller: _queryTextController,
+                                        onTapOutside: (event) => FocusScope.of(context).unfocus(),
+                                        autofocus: true,
+                                        decoration: InputDecoration(
+                                          border: const OutlineInputBorder(),
+                                          hintText: widget.searchHintText,
+                                        ),
+                                        onChanged: widget.onChanged,
+                                      ),
+                                      if (widget.isLoading)
+                                        const Flexible(
+                                            child: Column(children: [
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(vertical: 8.0),
+                                            child: LinearProgressIndicator(),
+                                          )
+                                        ])),
+                                      if (!widget.isLoading && widget.items.isNotEmpty)
+                                        Flexible(
+                                          child: ListView.builder(
+                                            physics: const ClampingScrollPhysics(),
+                                            itemCount: widget.items.length,
+                                            itemBuilder: (context, index) {
+                                              final item = widget.items[index];
+
+                                              return widget.builder(context, item);
+                                            },
+                                          ),
+                                        ),
+                                      widget.hasData
+                                          ? Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                widget.onDataResultText,
+                                                style: const TextStyle(fontSize: 20.0),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            )
+                                          : const SizedBox.shrink(),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  );
+                },
               ),
-              onTapOutside: (event) => FocusScope.of(context).unfocus(),
-              onTap: () {
-                FocusScope.of(context).unfocus();
-                showModalBottomSheet(
-                  isScrollControlled: true,
-                  shape: const LinearBorder(),
-                  context: context,
-                  builder: (context) {
-                    return StreamBuilder<bool>(
-                        stream: _readyStatusController.stream,
-                        builder: (context, snapshot) {
-                          return _SearchListBottomSheet<T>(
-                            showLoader: snapshot.data ?? false,
-                            searchInput: _queryTextController.text,
-                            onChanged: (text) {
-                              _queryTextController.text = text;
-                              widget.onChanged(text);
-                            },
-                            items: widget.items,
-                            onItemSelected: widget.onItemSelected,
-                            builder: widget.builder,
-                          );
-                        });
-                  },
-                );
-              },
-            ),
-          ],
-        )
-      ],
-    );
-  }
-}
-
-class _SearchListBottomSheet<T> extends StatelessWidget {
-  const _SearchListBottomSheet({
-    super.key,
-    required this.showLoader,
-    required this.searchInput,
-    required this.onChanged,
-    required this.onItemSelected,
-    required this.items,
-    required this.builder,
-  });
-
-  final bool showLoader;
-  final String searchInput;
-  final ValueSetter<String> onChanged;
-  final List<T> items;
-  final ValueSetter<T> onItemSelected;
-  final Widget Function(BuildContext, T) builder;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        AppBar(),
-        TextFormField(
-          initialValue: searchInput,
-          onTapOutside: (event) => FocusScope.of(context).unfocus(),
-          autofocus: true,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-          ),
-          onChanged: (value) {
-            onChanged(value);
-          },
-        ),
-        showLoader
-            ? const Flexible(
-                child: Column(
-                  children: [
-                    LinearProgressIndicator(),
-                  ],
-                ),
-              )
-            : Flexible(
-                child: ListView.builder(
-                  physics: const ClampingScrollPhysics(),
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-
-                    return builder(context, item);
-                  },
-                ),
-              )
-      ],
+            ],
+          )
+        ],
+      ),
     );
   }
 }

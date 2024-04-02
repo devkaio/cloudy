@@ -46,66 +46,68 @@ class _CurrentWeatherViewState extends State<CurrentWeatherView> {
                     ),
                     subtitle: Text('${item.weather.weatherDetails!.temp}°'),
                     trailing: item.weather.weatherData.firstOrNull != null ? Image.network(item.weather.weatherData.first.iconUrl) : null,
-                    onTap: () {
-                      context.read<CurrentWeatherCubit>().getCurrentWeather(item.city);
-                    },
+                    onTap: () => Navigator.popAndPushNamed(
+                      context,
+                      ForecastWeather.routeName,
+                      arguments: item.city,
+                    ),
                   ),
-                  isSearching: state.currentWeatherStep == CurrentWeatherStep.searching,
+                  isLoading: state.currentWeatherStep == CurrentWeatherStep.searching,
+                  hasData: state.currentWeatherStep == CurrentWeatherStep.searchResult && state.citiesSearchResult.isEmpty,
                   onChanged: context.read<CurrentWeatherCubit>().onSearchCityChanged,
-                  onItemSelected: (city) => Navigator.pushNamed(
-                    context,
-                    ForecastWeather.routeName,
-                    arguments: city,
-                  ),
                 ),
                 Flexible(
-                  child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                    ),
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
                     itemCount: state.featuredCities.length,
                     itemBuilder: (context, index) {
                       final city = state.featuredCities[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Feedback.forTap(context);
-                          Navigator.pushNamed(
-                            context,
-                            ForecastWeather.routeName,
-                            arguments: city,
-                          );
-                        },
-                        child: Card(
-                          color: Colors.amber,
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(city.name),
-                                    city.currentWeather?.weatherData.firstOrNull != null
-                                        ? Image.network(
-                                            city.currentWeather!.weatherData.first.iconUrl,
-                                            errorBuilder: (context, error, stackTrace) => Image.asset(
-                                              'assets/images/offline.png',
-                                              height: 50,
-                                            ),
-                                          )
-                                        : Image.asset(
-                                            'assets/images/offline.png',
-                                            width: 30,
-                                          ),
-                                  ],
+                      return Card(
+                        elevation: 0,
+                        margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                        child: ListTile(
+                          minVerticalPadding: 16.0,
+                          onTap: () {
+                            Feedback.forTap(context);
+                            Navigator.pushNamed(
+                              context,
+                              ForecastWeather.routeName,
+                              arguments: city,
+                            );
+                          },
+                          leading: city.currentWeather != null && city.currentWeather!.weatherData.isNotEmpty
+                              ? Image.network(
+                                  city.currentWeather!.weatherData.first.iconUrl,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset(
+                                      'assets/images/offline.png',
+                                      width: 30,
+                                    );
+                                  },
+                                )
+                              : Image.asset(
+                                  'assets/images/offline.png',
+                                  width: 30,
                                 ),
-                                if (city.currentWeather == null) const Text('No data available at the moment.'),
-                                if (city.currentWeather != null) ...[
-                                  Text('Temperature: ${city.currentWeather?.weatherDetails?.temp}°'),
-                                  Text('Min: ${city.currentWeather?.weatherDetails?.tempMin}°'),
-                                  Text('Max: ${city.currentWeather?.weatherDetails?.tempMax}°'),
-                                ]
-                              ],
-                            ),
+                          title: Text(
+                            city.name,
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                          ),
+                          trailing: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              if (city.currentWeather?.weatherDetails != null)
+                                Text(
+                                  '${city.currentWeather?.weatherDetails?.temp} °C',
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              if (city.currentWeather != null && city.currentWeather!.weatherData.isNotEmpty)
+                                Text(
+                                  '${city.currentWeather?.weatherData.first.main}',
+                                  style: const TextStyle(fontSize: 12),
+                                )
+                            ],
                           ),
                         ),
                       );
