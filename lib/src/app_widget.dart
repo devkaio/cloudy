@@ -35,6 +35,20 @@ class AppWidget extends StatelessWidget {
           ),
         ),
         child: MaterialApp(
+          themeMode: ThemeMode.system,
+          theme: ThemeData.from(
+              colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.pink,
+          )).copyWith(
+            cardTheme: CardTheme(color: Colors.pink.shade100),
+          ),
+          darkTheme: ThemeData.from(
+              colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.pink,
+            brightness: Brightness.dark,
+          )).copyWith(
+            cardTheme: CardTheme(color: Colors.grey.shade800),
+          ),
           initialRoute: CurrentWeather.routeName,
           routes: {
             CurrentWeather.routeName: (context) => const ConnectionChecker(child: CurrentWeather()),
