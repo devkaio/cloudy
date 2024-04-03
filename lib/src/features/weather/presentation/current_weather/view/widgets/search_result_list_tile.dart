@@ -32,14 +32,11 @@ class SearchResultListTile extends StatelessWidget {
         ],
       ),
       subtitle: Text('${item.weather.weatherDetails!.temp}°'),
-      trailing: item.weather.weatherData.firstOrNull != null
-          ? CachedNetworkImage(
-              imageUrl: item.weather.weatherData.first.iconUrl,
-              imageBuilder: (context, imageProvider) => Image(image: imageProvider),
-              placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png'),
-              errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png'),
-            )
-          : null,
+      trailing: CachedNetworkImage(
+        imageUrl: item.weather.weatherData.first.iconUrl,
+        placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png'),
+        errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png'),
+      ),
       onTap: onTap != null
           ? () {
               Feedback.forTap(context);

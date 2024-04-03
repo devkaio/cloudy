@@ -30,7 +30,7 @@ class ForecastWeatherView extends StatelessWidget {
             );
           }
 
-          if (state.forecast != null && state.forecast!.isEmpty) {
+          if (state.forecast == null || state.forecast!.isEmpty) {
             return const Padding(
               padding: EdgeInsets.all(16.0),
               child: Center(

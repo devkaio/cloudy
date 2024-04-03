@@ -51,22 +51,17 @@ class ForecastWeatherListTile extends StatelessWidget {
             context: context,
             redact: isLoading,
           ),
-          leading: item != null && item.weatherData.isNotEmpty
-              ? CachedNetworkImage(
-                  imageUrl: item.weatherData.first.iconUrl,
-                  placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png').redacted(
-                    context: context,
-                    redact: isLoading,
-                  ),
-                  errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png').redacted(
-                    context: context,
-                    redact: isLoading,
-                  ),
-                )
-              : Image.asset('assets/images/cloud-placeholder.png').redacted(
-                  context: context,
-                  redact: isLoading,
-                ),
+          leading: CachedNetworkImage(
+            imageUrl: item?.weatherData.first.iconUrl ?? '',
+            placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png').redacted(
+              context: context,
+              redact: isLoading,
+            ),
+            errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png').redacted(
+              context: context,
+              redact: isLoading,
+            ),
+          ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

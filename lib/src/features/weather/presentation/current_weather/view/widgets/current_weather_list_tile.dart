@@ -29,26 +29,17 @@ class CurrentWeatherListTile extends StatelessWidget {
                 onTap!();
               }
             : () {},
-        leading: city.currentWeather != null && city.currentWeather!.weatherData.isNotEmpty
-            ? CachedNetworkImage(
-                imageUrl: city.currentWeather!.weatherData.first.iconUrl,
-                imageBuilder: (context, imageProvider) => Image(image: imageProvider).redacted(
-                  context: context,
-                  redact: isLoading,
-                ),
-                placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png').redacted(
-                  context: context,
-                  redact: isLoading,
-                ),
-                errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png').redacted(
-                  context: context,
-                  redact: isLoading,
-                ),
-              )
-            : Image.asset('assets/images/cloud-placeholder.png').redacted(
-                context: context,
-                redact: isLoading,
-              ),
+        leading: CachedNetworkImage(
+          imageUrl: city.currentWeather?.weatherData.first.iconUrl ?? '',
+          placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png').redacted(
+            context: context,
+            redact: isLoading,
+          ),
+          errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png').redacted(
+            context: context,
+            redact: isLoading,
+          ),
+        ),
         title: Text(
           city.name,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
@@ -57,20 +48,31 @@ class CurrentWeatherListTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(
-              '${city.currentWeather?.weatherDetails?.temp} °C',
-              style: const TextStyle(fontSize: 16),
-            ).redacted(
-              context: context,
-              redact: isLoading,
-            ),
-            Text(
-              '${city.currentWeather?.weatherData.first.main}',
-              style: const TextStyle(fontSize: 12),
-            ).redacted(
-              context: context,
-              redact: isLoading,
-            )
+            if (city.currentWeather == null && !isLoading)
+              const Text(
+                '-- °C',
+                style: TextStyle(fontSize: 16),
+              ),
+            if (isLoading)
+              const Text(
+                '-- °C',
+                style: TextStyle(fontSize: 16),
+              ).redacted(context: context, redact: true),
+            if (city.currentWeather?.weatherDetails?.temp != null)
+              Text(
+                '${city.currentWeather?.weatherDetails?.temp} °C',
+                style: const TextStyle(fontSize: 16),
+              ).redacted(context: context, redact: isLoading),
+            if (isLoading)
+              const Text(
+                '-- °C',
+                style: TextStyle(fontSize: 16),
+              ).redacted(context: context, redact: true),
+            if (city.currentWeather?.weatherData.first.main != null)
+              Text(
+                '${city.currentWeather?.weatherData.first.main}',
+                style: const TextStyle(fontSize: 12),
+              ).redacted(context: context, redact: isLoading),
           ],
         ),
       ),
