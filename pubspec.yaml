@@ -34,3 +34,18 @@ flutter:
   assets:
     - assets/
     - assets/images/
+  fonts:
+    - family: Cera
+      fonts:
+        - asset: assets/fonts/Cera-Pro-Thin-Demo.otf
+          weight: 100
+        - asset: assets/fonts/Cera-Pro-Light-Demo.otf
+          weight: 300
+        - asset: assets/fonts/Cera-Pro-Regular-Demo.otf
+          weight: 400
+        - asset: assets/fonts/Cera-Pro-Medium-Demo.otf
+          weight: 500
+        - asset: assets/fonts/Cera-Pro-Bold-Demo.otf
+          weight: 700
+        - asset: assets/fonts/Cera-Pro-Black-Demo.otf
+          weight: 900

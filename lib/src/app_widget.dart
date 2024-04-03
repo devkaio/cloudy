@@ -36,18 +36,36 @@ class AppWidget extends StatelessWidget {
         ),
         child: MaterialApp(
           themeMode: ThemeMode.system,
-          theme: ThemeData.from(
-              colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.pink,
-          )).copyWith(
+          theme: ThemeData.light().copyWith(
+            textTheme: Theme.of(context).textTheme.apply(
+                  fontFamily: 'Cera',
+                  bodyColor: Colors.grey.shade800,
+                ),
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
             cardTheme: CardTheme(color: Colors.pink.shade100),
+            expansionTileTheme: ExpansionTileThemeData(
+              iconColor: Colors.pink,
+              backgroundColor: Colors.pink.shade100,
+              textColor: Colors.grey.shade900,
+              collapsedTextColor: Colors.grey.shade900,
+            ),
           ),
-          darkTheme: ThemeData.from(
-              colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.pink,
-            brightness: Brightness.dark,
-          )).copyWith(
+          darkTheme: ThemeData.dark().copyWith(
+            textTheme: Theme.of(context).textTheme.apply(
+                  fontFamily: 'Cera',
+                  bodyColor: Colors.grey.shade300,
+                ),
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.pink,
+              brightness: Brightness.dark,
+            ),
             cardTheme: CardTheme(color: Colors.grey.shade800),
+            expansionTileTheme: ExpansionTileThemeData(
+              iconColor: Colors.pink,
+              backgroundColor: Colors.grey.shade800,
+              textColor: Colors.grey.shade300,
+              collapsedTextColor: Colors.grey.shade300,
+            ),
           ),
           initialRoute: CurrentWeather.routeName,
           routes: {
