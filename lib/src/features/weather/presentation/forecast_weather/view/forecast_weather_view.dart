@@ -61,69 +61,73 @@ class ForecastWeatherView extends StatelessWidget {
                     .map((e) => e.weatherDetails!.tempMin)
                     .reduce((current, next) => current < next ? current : next);
 
-                return ExpansionTile(
-                    expandedAlignment: Alignment.centerLeft,
-                    title: Text(
-                      item.date.formattedMMMEd,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
+                return Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  child: ExpansionTile(
+                      shape: const RoundedRectangleBorder(),
+                      expandedAlignment: Alignment.centerLeft,
+                      title: Text(
+                        item.date.formattedMMMEd,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
                       ),
-                    ),
-                    subtitle: Text(item.weatherData.first.description.toTitleCase),
-                    leading: item.weatherData.isNotEmpty
-                        ? CachedNetworkImage(
-                            imageUrl: item.weatherData.first.iconUrl,
-                            placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png'),
-                            errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png'),
-                          )
-                        : Image.asset('assets/images/cloud-placeholder.png'),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
+                      subtitle: Text(item.weatherData.first.description.toTitleCase),
+                      leading: item.weatherData.isNotEmpty
+                          ? CachedNetworkImage(
+                              imageUrl: item.weatherData.first.iconUrl,
+                              placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png'),
+                              errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png'),
+                            )
+                          : Image.asset('assets/images/cloud-placeholder.png'),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '$tempMax °C',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                '$tempMin °C',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: 8),
+                        ],
+                      ),
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '$tempMax °C',
-                              style: const TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                            Text(
-                              '$tempMin °C',
-                              style: const TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: state.forecast!
+                                .where((w) => w.date.day == item.date.day)
+                                .map((e) => Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text('${e.weatherDetails!.temp}°'),
+                                        CachedNetworkImage(
+                                          imageUrl: e.weatherData.first.iconUrl,
+                                          placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png'),
+                                          errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png'),
+                                        ),
+                                        Text('${e.date.hour}:00'),
+                                      ],
+                                    ))
+                                .toList(),
+                          ),
                         ),
-                        const SizedBox(width: 8),
-                      ],
-                    ),
-                    children: [
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: state.forecast!
-                              .where((w) => w.date.day == item.date.day)
-                              .map((e) => Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text('${e.weatherDetails!.temp}°'),
-                                      CachedNetworkImage(
-                                        imageUrl: e.weatherData.first.iconUrl,
-                                        placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png'),
-                                        errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png'),
-                                      ),
-                                      Text('${e.date.hour}:00'),
-                                    ],
-                                  ))
-                              .toList(),
-                        ),
-                      ),
-                    ]);
+                      ]),
+                );
               },
             );
           } else {

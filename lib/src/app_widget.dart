@@ -45,7 +45,6 @@ class AppWidget extends StatelessWidget {
             cardTheme: CardTheme(color: Colors.pink.shade100),
             expansionTileTheme: ExpansionTileThemeData(
               iconColor: Colors.pink,
-              backgroundColor: Colors.pink.shade100,
               textColor: Colors.grey.shade900,
               collapsedTextColor: Colors.grey.shade900,
             ),
@@ -62,7 +61,6 @@ class AppWidget extends StatelessWidget {
             cardTheme: CardTheme(color: Colors.grey.shade800),
             expansionTileTheme: ExpansionTileThemeData(
               iconColor: Colors.pink,
-              backgroundColor: Colors.grey.shade800,
               textColor: Colors.grey.shade300,
               collapsedTextColor: Colors.grey.shade300,
             ),
