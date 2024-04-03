@@ -48,6 +48,9 @@ class AppWidget extends StatelessWidget {
               textColor: Colors.grey.shade900,
               collapsedTextColor: Colors.grey.shade900,
             ),
+            snackBarTheme: const SnackBarThemeData(
+              contentTextStyle: TextStyle(color: Colors.white),
+            ),
           ),
           darkTheme: ThemeData.dark().copyWith(
             textTheme: Theme.of(context).textTheme.apply(
@@ -63,6 +66,9 @@ class AppWidget extends StatelessWidget {
               iconColor: Colors.pink,
               textColor: Colors.grey.shade300,
               collapsedTextColor: Colors.grey.shade300,
+            ),
+            snackBarTheme: const SnackBarThemeData(
+              contentTextStyle: TextStyle(color: Colors.white),
             ),
           ),
           initialRoute: CurrentWeather.routeName,
