@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/constants/app_constants.dart';
+import 'core/constants/app_theme_data.dart';
 import 'core/dependencies/connectivity/connectivity_service.dart';
 import 'core/dependencies/http/dio_service.dart';
 import 'core/dependencies/local_storage/shared_preferences_service.dart';
@@ -36,41 +37,8 @@ class AppWidget extends StatelessWidget {
         ),
         child: MaterialApp(
           themeMode: ThemeMode.system,
-          theme: ThemeData.light().copyWith(
-            textTheme: Theme.of(context).textTheme.apply(
-                  fontFamily: 'Cera',
-                  bodyColor: Colors.grey.shade800,
-                ),
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
-            cardTheme: CardTheme(color: Colors.pink.shade100),
-            expansionTileTheme: ExpansionTileThemeData(
-              iconColor: Colors.pink,
-              textColor: Colors.grey.shade900,
-              collapsedTextColor: Colors.grey.shade900,
-            ),
-            snackBarTheme: const SnackBarThemeData(
-              contentTextStyle: TextStyle(color: Colors.white),
-            ),
-          ),
-          darkTheme: ThemeData.dark().copyWith(
-            textTheme: Theme.of(context).textTheme.apply(
-                  fontFamily: 'Cera',
-                  bodyColor: Colors.grey.shade300,
-                ),
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.pink,
-              brightness: Brightness.dark,
-            ),
-            cardTheme: CardTheme(color: Colors.grey.shade800),
-            expansionTileTheme: ExpansionTileThemeData(
-              iconColor: Colors.pink,
-              textColor: Colors.grey.shade300,
-              collapsedTextColor: Colors.grey.shade300,
-            ),
-            snackBarTheme: const SnackBarThemeData(
-              contentTextStyle: TextStyle(color: Colors.white),
-            ),
-          ),
+          theme: AppThemeData.lightTheme(context),
+          darkTheme: AppThemeData.darkTheme(context),
           initialRoute: CurrentWeather.routeName,
           routes: {
             CurrentWeather.routeName: (context) => const ConnectionChecker(child: CurrentWeather()),
