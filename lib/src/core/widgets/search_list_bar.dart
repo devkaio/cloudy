@@ -14,12 +14,25 @@ class SearchListBar<T> extends StatefulWidget {
     this.onDataResultText = 'No results found for this search.\nPlease try again.',
   });
 
+  /// If `true`, a [LinearProgressIndicator] will be shown below the search text field.
   final bool isLoading;
+
+  /// If `true`, [onDataResultText] will be displayed.
   final bool hasData;
+
+  /// List of items to be displayed in the search list bar as result.
   final List<T> items;
+
+  /// Callback function when the text in the search bar changes.
   final ValueSetter<String> onChanged;
+
+  /// Used to build the widget for each item in the search list bar. Since the search list bar is generic, we are providing this builder.
   final Widget Function(BuildContext, T) builder;
+
+  /// Text to display as a hint in the search list bar.
   final String searchHintText;
+
+  /// Text to display after the search list returns the result.
   final String onDataResultText;
 
   @override

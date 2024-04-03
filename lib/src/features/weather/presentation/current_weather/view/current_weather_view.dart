@@ -30,6 +30,7 @@ class _CurrentWeatherViewState extends State<CurrentWeatherView> {
             child: Column(
               children: [
                 SearchListBar<({City city, Weather weather})>(
+                  searchHintText: 'Type a city name to search...',
                   items: state.citiesSearchResult,
                   builder: (context, item) => ListTile(
                     title: Row(
