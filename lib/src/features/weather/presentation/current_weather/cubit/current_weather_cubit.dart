@@ -44,24 +44,6 @@ class CurrentWeatherCubit extends Cubit<CurrentWeatherState> {
     ));
   }
 
-  Future<void> getCurrentWeather(City city) async {
-    emit(state.copyWith(loading: true));
-
-    final result = await _weatherRepository.fetchCurrentWeatherByGeolocation(city.coordinates);
-
-    result.fold(
-      (data) => emit(CurrentWeatherState(
-        weather: data,
-        loading: false,
-      )),
-      (error) => emit(CurrentWeatherState(
-        errorMessage: error.message,
-        loading: false,
-        currentWeatherStep: CurrentWeatherStep.initial,
-      )),
-    );
-  }
-
   Future<void> onSearchCityChanged(String cityName) async {
     if (cityName.trim().isEmpty) {
       _debounce?.cancel();

@@ -15,11 +15,13 @@ class ForecastWeatherCubit extends Cubit<ForecastWeatherState> {
   final WeatherRepository _weatherRepository;
 
   Future<void> fetchForecast(City city) async {
+    emit(state.copyWith(loading: true));
     final result = await _weatherRepository.fetchForecastWeatherByGeolocation(city.coordinates);
-
-    result.fold(
-      (data) => emit(state.copyWith(forecast: data, loading: false)),
-      (failure) => emit(state.copyWith(errorMessage: failure.message, loading: false)),
-    );
+    if (!isClosed) {
+      result.fold(
+        (data) => emit(state.copyWith(forecast: data, loading: false)),
+        (failure) => emit(state.copyWith(errorMessage: failure.message, loading: false)),
+      );
+    }
   }
 }
