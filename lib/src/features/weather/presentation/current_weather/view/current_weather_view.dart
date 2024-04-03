@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,12 +37,11 @@ class _CurrentWeatherViewState extends State<CurrentWeatherView> {
                       children: [
                         Text(item.city.name),
                         const SizedBox(width: 8),
-                        Image.network(
-                          item.city.flagUrl,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Image.asset('assets/images/offline.png');
-                          },
-                        ),
+                        CachedNetworkImage(
+                          imageUrl: item.city.flagUrl,
+                          placeholder: (context, url) => Image.asset('assets/images/flag-placeholder.jpg'),
+                          errorWidget: (context, url, error) => Image.asset('assets/images/flag-placeholder.jpg'),
+                        )
                       ],
                     ),
                     subtitle: Text('${item.weather.weatherDetails!.temp}°'),
@@ -76,19 +76,12 @@ class _CurrentWeatherViewState extends State<CurrentWeatherView> {
                             );
                           },
                           leading: city.currentWeather != null && city.currentWeather!.weatherData.isNotEmpty
-                              ? Image.network(
-                                  city.currentWeather!.weatherData.first.iconUrl,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Image.asset(
-                                      'assets/images/offline.png',
-                                      width: 30,
-                                    );
-                                  },
+                              ? CachedNetworkImage(
+                                  imageUrl: city.currentWeather!.weatherData.first.iconUrl,
+                                  placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png'),
+                                  errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png'),
                                 )
-                              : Image.asset(
-                                  'assets/images/offline.png',
-                                  width: 30,
-                                ),
+                              : Image.asset('assets/images/cloud-placeholder.png'),
                           title: Text(
                             city.name,
                             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),

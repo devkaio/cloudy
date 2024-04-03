@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -62,20 +63,43 @@ class ForecastWeatherView extends StatelessWidget {
 
                 return ExpansionTile(
                     expandedAlignment: Alignment.centerLeft,
-                    title: Text(item.date.formattedMMMEd),
+                    title: Text(
+                      item.date.formattedMMMEd,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
+                    ),
                     subtitle: Text(item.weatherData.first.description.toTitleCase),
+                    leading: item.weatherData.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: item.weatherData.first.iconUrl,
+                            placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png'),
+                            errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png'),
+                          )
+                        : Image.asset('assets/images/cloud-placeholder.png'),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Image.network(item.weatherData.first.iconUrl),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('$tempMax°'),
-                            Text('$tempMin°'),
+                            Text(
+                              '$tempMax °C',
+                              style: const TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              '$tempMin °C',
+                              style: const TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
                           ],
                         ),
+                        const SizedBox(width: 8),
                       ],
                     ),
                     children: [
@@ -88,7 +112,11 @@ class ForecastWeatherView extends StatelessWidget {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text('${e.weatherDetails!.temp}°'),
-                                      Image.network(e.weatherData.first.iconUrl),
+                                      CachedNetworkImage(
+                                        imageUrl: e.weatherData.first.iconUrl,
+                                        placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png'),
+                                        errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png'),
+                                      ),
                                       Text('${e.date.hour}:00'),
                                     ],
                                   ))
