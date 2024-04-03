@@ -7,7 +7,7 @@ import '../../../../../../core/extensions/datetime_ext.dart';
 import '../../../../../../core/extensions/string_ext.dart';
 import '../../../../domain/weather/weather.dart';
 
-class ForecastWeatherListTile extends StatelessWidget {
+class ForecastWeatherListTile extends StatefulWidget {
   const ForecastWeatherListTile({
     super.key,
     this.dates = const [],
@@ -22,44 +22,55 @@ class ForecastWeatherListTile extends StatelessWidget {
   final bool isLoading;
 
   @override
+  State<ForecastWeatherListTile> createState() => _ForecastWeatherListTileState();
+}
+
+class _ForecastWeatherListTileState extends State<ForecastWeatherListTile> {
+  bool expanded = false;
+
+  @override
   Widget build(BuildContext context) {
-    final item = forecast.firstWhereOrNull((weather) => weather.date.day == dates[index].day);
+    final item = widget.forecast.firstWhereOrNull((weather) => weather.date.day == widget.dates[widget.index].day);
 
     double? tempMax;
 
-    if (forecast.isNotEmpty) {
-      tempMax = forecast.where((weather) => weather.date.day == dates[index].day).map((e) => e.weatherDetails!.tempMax).reduce((current, next) => current > next ? current : next);
+    if (widget.forecast.isNotEmpty) {
+      tempMax = widget.forecast
+          .where((weather) => weather.date.day == widget.dates[widget.index].day)
+          .map((e) => e.weatherDetails!.tempMax)
+          .reduce((current, next) => current > next ? current : next);
     }
 
     double? tempMin;
-    if (forecast.isNotEmpty) {
-      tempMin = forecast.where((weather) => weather.date.day == dates[index].day).map((e) => e.weatherDetails!.tempMin).reduce((current, next) => current < next ? current : next);
+    if (widget.forecast.isNotEmpty) {
+      tempMin = widget.forecast
+          .where((weather) => weather.date.day == widget.dates[widget.index].day)
+          .map((e) => e.weatherDetails!.tempMin)
+          .reduce((current, next) => current < next ? current : next);
     }
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: ExpansionTile(
-          shape: const RoundedRectangleBorder(),
-          expandedAlignment: Alignment.centerLeft,
+          onExpansionChanged: widget.isLoading ? null : (value) => setState(() => expanded = value),
           title: Text(
             item?.date.formattedMMMEd ?? DateTime.now().formattedMMMEd,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 24,
             ),
-          ).redacted(context: context, redact: isLoading),
+          ).redacted(context: context, redact: widget.isLoading),
           subtitle: Text(item?.weatherData.first.description.toTitleCase ?? 'placeholder').redacted(
             context: context,
-            redact: isLoading,
+            redact: widget.isLoading,
           ),
           leading: CachedNetworkImage(
             imageUrl: item?.weatherData.first.iconUrl ?? '',
             placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png').redacted(
               context: context,
-              redact: isLoading,
+              redact: widget.isLoading,
             ),
             errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png').redacted(
               context: context,
-              redact: isLoading,
+              redact: widget.isLoading,
             ),
           ),
           trailing: Row(
@@ -76,7 +87,7 @@ class ForecastWeatherListTile extends StatelessWidget {
                     ),
                   ).redacted(
                     context: context,
-                    redact: isLoading,
+                    redact: widget.isLoading,
                   ),
                   Text(
                     '$tempMin °C',
@@ -85,18 +96,19 @@ class ForecastWeatherListTile extends StatelessWidget {
                     ),
                   ).redacted(
                     context: context,
-                    redact: isLoading,
+                    redact: widget.isLoading,
                   ),
                 ],
               ),
               const SizedBox(width: 8),
+              expanded ? const Icon(Icons.expand_less) : const Icon(Icons.expand_more),
             ],
           ),
           children: [
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: forecast
+                children: widget.forecast
                     .where((w) => w.date.day == item?.date.day)
                     .map((e) => Column(
                           mainAxisSize: MainAxisSize.min,

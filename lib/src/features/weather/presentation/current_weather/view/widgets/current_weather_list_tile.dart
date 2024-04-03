@@ -19,8 +19,6 @@ class CurrentWeatherListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 0,
-      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: ListTile(
         minVerticalPadding: 16.0,
         onTap: onTap != null

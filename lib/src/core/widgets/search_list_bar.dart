@@ -66,6 +66,7 @@ class _SearchListBarState<T> extends State<SearchListBar<T>> {
             children: [
               TextField(
                 readOnly: true,
+                enabled: FocusScope.of(context).hasFocus,
                 controller: _queryTextController,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
@@ -73,7 +74,7 @@ class _SearchListBarState<T> extends State<SearchListBar<T>> {
                 ),
                 onTapOutside: (event) => FocusScope.of(context).unfocus(),
                 onTap: () {
-                  FocusScope.of(context).unfocus();
+                  if (FocusScope.of(context).hasFocus) FocusScope.of(context).unfocus();
                   Navigator.of(context).push(
                     PageRouteBuilder(
                       pageBuilder: (context, animation, secondary) {
@@ -110,14 +111,8 @@ class _SearchListBarState<T> extends State<SearchListBar<T>> {
                                         ),
                                         onChanged: widget.onChanged,
                                       ),
-                                      if (widget.isLoading)
-                                        const Flexible(
-                                            child: Column(children: [
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(vertical: 8.0),
-                                            child: LinearProgressIndicator(),
-                                          )
-                                        ])),
+                                      const SizedBox(height: 8),
+                                      if (widget.isLoading) const Flexible(child: Column(children: [LinearProgressIndicator()])),
                                       if (!widget.isLoading && widget.items.isNotEmpty)
                                         Flexible(
                                           child: ListView.builder(

@@ -36,16 +36,19 @@ class _CurrentWeatherViewState extends State<CurrentWeatherView> {
                 SearchListBar<({City city, Weather weather})>(
                   searchHintText: 'Type a city name to search...',
                   items: state.citiesSearchResult,
-                  builder: (context, item) => SearchResultListTile(
-                    item: item,
-                    onTap: () {
-                      Navigator.popAndPushNamed(
-                        context,
-                        ForecastWeather.routeName,
-                        arguments: item.city,
-                      );
-                    },
-                    isLoading: state.currentWeatherStep == CurrentWeatherStep.searching,
+                  builder: (context, item) => Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: SearchResultListTile(
+                      item: item,
+                      onTap: () {
+                        Navigator.popAndPushNamed(
+                          context,
+                          ForecastWeather.routeName,
+                          arguments: item.city,
+                        );
+                      },
+                      isLoading: state.currentWeatherStep == CurrentWeatherStep.searching,
+                    ),
                   ),
                   isLoading: state.currentWeatherStep == CurrentWeatherStep.searching,
                   hasData: state.currentWeatherStep == CurrentWeatherStep.searchResult && state.citiesSearchResult.isEmpty,
