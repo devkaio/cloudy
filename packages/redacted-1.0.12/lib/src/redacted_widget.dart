@@ -12,6 +12,9 @@ extension Redacted on Widget {
     required bool redact,
     RedactedConfiguration? configuration,
   }) {
+    configuration ??= (configuration ?? RedactedConfiguration()).copyWith(
+      redactedColor: Theme.of(context).colorScheme.secondary,
+    );
     if (!redact) return this;
     if (this is RedactedHideWidget) {
       return Opacity(opacity: 0, child: (this as RedactedHideWidget).child);
@@ -55,8 +58,7 @@ extension Redacted on Widget {
       return (this as Expanded).redact(context, configuration: configuration);
     }
     if (this is AspectRatio) {
-      return (this as AspectRatio)
-          .redact(context, configuration: configuration);
+      return (this as AspectRatio).redact(context, configuration: configuration);
     }
     if (this is Image) {
       return (this as Image).redact(configuration: configuration);
@@ -69,8 +71,7 @@ extension Redacted on Widget {
       return (this as InkWell).redact(context, configuration: configuration);
     }
     if (this is StatelessWidget) {
-      return (this as StatelessWidget).build(context).redacted(
-          context: context, redact: redact, configuration: configuration);
+      return (this as StatelessWidget).build(context).redacted(context: context, redact: redact, configuration: configuration);
     }
     return this;
   }
