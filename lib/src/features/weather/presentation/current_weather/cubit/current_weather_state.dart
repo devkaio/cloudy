@@ -4,7 +4,6 @@ enum CurrentWeatherStep {
   initial,
   searching,
   searchResult,
-  failedSearch,
 }
 
 class CurrentWeatherState {
