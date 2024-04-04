@@ -59,17 +59,22 @@ class _ForecastWeatherListTileState extends State<ForecastWeatherListTile> {
             context: context,
             redact: widget.isLoading,
           ),
-          leading: CachedNetworkImage(
-            imageUrl: item?.weatherData.first.iconUrl ?? '',
-            placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png').redacted(
-              context: context,
-              redact: widget.isLoading,
-            ),
-            errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png').redacted(
-              context: context,
-              redact: widget.isLoading,
-            ),
-          ),
+          leading: item?.weatherData.first.iconUrl != null
+              ? CachedNetworkImage(
+                  imageUrl: item?.weatherData.first.iconUrl ?? '',
+                  placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png').redacted(
+                    context: context,
+                    redact: widget.isLoading,
+                  ),
+                  errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png').redacted(
+                    context: context,
+                    redact: widget.isLoading,
+                  ),
+                )
+              : Image.asset('assets/images/cloud-placeholder.png').redacted(
+                  context: context,
+                  redact: widget.isLoading,
+                ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

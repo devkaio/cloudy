@@ -27,17 +27,22 @@ class CurrentWeatherListTile extends StatelessWidget {
                 onTap!();
               }
             : () {},
-        leading: CachedNetworkImage(
-          imageUrl: city.currentWeather?.weatherData.first.iconUrl ?? '',
-          placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png').redacted(
-            context: context,
-            redact: isLoading,
-          ),
-          errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png').redacted(
-            context: context,
-            redact: isLoading,
-          ),
-        ),
+        leading: city.currentWeather?.weatherData.first.iconUrl != null
+            ? CachedNetworkImage(
+                imageUrl: city.currentWeather?.weatherData.first.iconUrl ?? '',
+                placeholder: (context, url) => Image.asset('assets/images/cloud-placeholder.png').redacted(
+                  context: context,
+                  redact: isLoading,
+                ),
+                errorWidget: (context, url, error) => Image.asset('assets/images/cloud-placeholder.png').redacted(
+                  context: context,
+                  redact: isLoading,
+                ),
+              )
+            : Image.asset('assets/images/cloud-placeholder.png').redacted(
+                context: context,
+                redact: isLoading,
+              ),
         title: Text(city.name).redacted(context: context, redact: isLoading),
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
