@@ -33,6 +33,17 @@ abstract class AppThemeData {
         listTileTheme: ListTileTheme.of(context).copyWith(
           tileColor: Colors.pink.shade100,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          leadingAndTrailingTextStyle: TextStyle(
+            fontSize: MediaQuery.sizeOf(context).width <= 320 ? 14 : 16,
+            color: Colors.grey.shade800,
+            fontFamily: 'Cera',
+          ),
+          titleTextStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: MediaQuery.sizeOf(context).width <= 320 ? 20 : 24,
+            color: Colors.grey.shade800,
+            fontFamily: 'Cera',
+          ),
         ),
         snackBarTheme: SnackBarThemeData(contentTextStyle: TextStyle(color: Colors.grey.shade200)),
         highlightColor: Colors.pink.shade200,
@@ -70,6 +81,17 @@ abstract class AppThemeData {
         listTileTheme: ListTileTheme.of(context).copyWith(
           tileColor: Colors.grey.shade800,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          leadingAndTrailingTextStyle: TextStyle(
+            fontSize: MediaQuery.sizeOf(context).width <= 320 ? 16 : 20,
+            color: Colors.grey.shade300,
+            fontFamily: 'Cera',
+          ),
+          titleTextStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: MediaQuery.sizeOf(context).width <= 320 ? 20 : 24,
+            color: Colors.grey.shade300,
+            fontFamily: 'Cera',
+          ),
         ),
         snackBarTheme: SnackBarThemeData(
           contentTextStyle: TextStyle(color: Colors.grey.shade200),

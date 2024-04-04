@@ -38,39 +38,35 @@ class CurrentWeatherListTile extends StatelessWidget {
             redact: isLoading,
           ),
         ),
-        title: Text(
-          city.name,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-        ).redacted(context: context, redact: isLoading),
+        title: Text(city.name).redacted(context: context, redact: isLoading),
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            if (city.currentWeather == null && !isLoading)
-              const Text(
-                '-- °C',
-                style: TextStyle(fontSize: 16),
+            if (city.currentWeather == null && !isLoading) const Text('-- °C'),
+            if (isLoading)
+              const Text('-- °C').redacted(
+                context: context,
+                redact: true,
+              ),
+            if (city.currentWeather?.weatherDetails?.temp != null)
+              Text('${city.currentWeather?.weatherDetails?.temp} °C').redacted(
+                context: context,
+                redact: isLoading,
               ),
             if (isLoading)
-              const Text(
-                '-- °C',
-                style: TextStyle(fontSize: 16),
-              ).redacted(context: context, redact: true),
-            if (city.currentWeather?.weatherDetails?.temp != null)
-              Text(
-                '${city.currentWeather?.weatherDetails?.temp} °C',
-                style: const TextStyle(fontSize: 16),
-              ).redacted(context: context, redact: isLoading),
-            if (isLoading)
-              const Text(
-                '-- °C',
-                style: TextStyle(fontSize: 16),
-              ).redacted(context: context, redact: true),
+              const Text('-- °C').redacted(
+                context: context,
+                redact: true,
+              ),
             if (city.currentWeather?.weatherData.first.main != null)
               Text(
                 '${city.currentWeather?.weatherData.first.main}',
-                style: const TextStyle(fontSize: 12),
-              ).redacted(context: context, redact: isLoading),
+                style: TextStyle(fontSize: MediaQuery.sizeOf(context).width <= 320 ? 12 : 14),
+              ).redacted(
+                context: context,
+                redact: isLoading,
+              ),
           ],
         ),
       ),

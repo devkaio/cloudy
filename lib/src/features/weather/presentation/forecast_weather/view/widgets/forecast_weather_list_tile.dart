@@ -51,13 +51,10 @@ class _ForecastWeatherListTileState extends State<ForecastWeatherListTile> {
     return Card(
       child: ExpansionTile(
           onExpansionChanged: widget.isLoading ? null : (value) => setState(() => expanded = value),
-          title: Text(
-            item?.date.formattedMMMEd ?? DateTime.now().formattedMMMEd,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-            ),
-          ).redacted(context: context, redact: widget.isLoading),
+          title: Text(item?.date.formattedMMMEd ?? DateTime.now().formattedMMMEd).redacted(
+            context: context,
+            redact: widget.isLoading,
+          ),
           subtitle: Text(item?.weatherData.first.description.toTitleCase ?? 'placeholder').redacted(
             context: context,
             redact: widget.isLoading,
@@ -80,21 +77,11 @@ class _ForecastWeatherListTileState extends State<ForecastWeatherListTile> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    '$tempMax °C',
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ).redacted(
+                  Text('$tempMax °C').redacted(
                     context: context,
                     redact: widget.isLoading,
                   ),
-                  Text(
-                    '$tempMin °C',
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ).redacted(
+                  Text('$tempMin °C').redacted(
                     context: context,
                     redact: widget.isLoading,
                   ),
