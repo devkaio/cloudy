@@ -87,15 +87,7 @@ class _SearchListBarState<T> extends State<SearchListBar<T>> {
                                 widget.onChanged('');
                               },
                               child: Scaffold(
-                                appBar: AppBar(
-                                  leading: BackButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      _queryTextController.clear();
-                                      widget.onChanged('');
-                                    },
-                                  ),
-                                ),
+                                appBar: AppBar(),
                                 body: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
